@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace Honeywell_backend.Serializers
 {
@@ -19,7 +16,8 @@ namespace Honeywell_backend.Serializers
         public string Address { get; set; }
         
         [Required]
-        public int Phone { get; set; }
+        [MaxLength(20)]
+        public string Phone { get; set; }
         
         [Required]
         [MaxLength(100)]
@@ -29,7 +27,7 @@ namespace Honeywell_backend.Serializers
         [MaxLength(100)]
         public string Username { get; set; }    
         
-        [Required]
+        [Required]        
         [MaxLength(100)]           
         public string Password { get; set; }
         

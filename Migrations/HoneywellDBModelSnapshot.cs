@@ -38,15 +38,15 @@ namespace Honeywell_backend.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("varchar(100)")
-                        .HasMaxLength(200);
+                        .HasColumnType("varchar(100)");
 
                     b.Property<string>("Password")
                         .IsRequired()
                         .HasColumnType("varchar(100)");
 
-                    b.Property<int>("Phone")
-                        .HasColumnType("int");
+                    b.Property<string>("Phone")
+                        .IsRequired()
+                        .HasColumnType("varchar(100)");
 
                     b.Property<string>("Username")
                         .IsRequired()

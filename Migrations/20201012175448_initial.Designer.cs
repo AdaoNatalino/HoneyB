@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Honeywell_backend.Migrations
 {
     [DbContext(typeof(HoneywellDB))]
-    [Migration("20201012162503_initial")]
+    [Migration("20201012175448_initial")]
     partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -40,15 +40,15 @@ namespace Honeywell_backend.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("varchar(100)")
-                        .HasMaxLength(200);
+                        .HasColumnType("varchar(100)");
 
                     b.Property<string>("Password")
                         .IsRequired()
                         .HasColumnType("varchar(100)");
 
-                    b.Property<int>("Phone")
-                        .HasColumnType("int");
+                    b.Property<string>("Phone")
+                        .IsRequired()
+                        .HasColumnType("varchar(100)");
 
                     b.Property<string>("Username")
                         .IsRequired()

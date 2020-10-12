@@ -42,7 +42,8 @@ namespace Honeywell_backend.Mappings
 
             builder
                 .Property(u => u.Phone)
-                .IsRequired();
+                .IsRequired()
+                .HasColumnType("varchar(100)");
 
             builder
                 .Property(u => u.IsStaff)
