@@ -12,7 +12,13 @@ namespace Honeywell_backend.Data
     {
         public HoneywellDB(DbContextOptions<HoneywellDB> options) : base(options) { }
 
-        public DbSet<Costumer> Costumers { get; set; }
+        public DbSet<User> Users { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.ApplyConfigurationsFromAssembly(typeof(HoneywellDB).Assembly);
+            base.OnModelCreating(modelBuilder);
+        }
 
     }
 }
