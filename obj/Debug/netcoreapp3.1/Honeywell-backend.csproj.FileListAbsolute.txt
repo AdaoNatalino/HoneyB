@@ -1,0 +1,10 @@
+C:\Users\adaoj\dev\flatiron\labs\Honeywell\Honeywell-backend\bin\Debug\netcoreapp3.1\appsettings.Development.json
+C:\Users\adaoj\dev\flatiron\labs\Honeywell\Honeywell-backend\bin\Debug\netcoreapp3.1\appsettings.json
+C:\Users\adaoj\dev\flatiron\labs\Honeywell\Honeywell-backend\bin\Debug\netcoreapp3.1\Properties\launchSettings.json
+C:\Users\adaoj\dev\flatiron\labs\Honeywell\Honeywell-backend\bin\Debug\netcoreapp3.1\Honeywell-backend.exe
+C:\Users\adaoj\dev\flatiron\labs\Honeywell\Honeywell-backend\obj\Debug\netcoreapp3.1\Honeywell-backend.csprojAssemblyReference.cache
+C:\Users\adaoj\dev\flatiron\labs\Honeywell\Honeywell-backend\obj\Debug\netcoreapp3.1\Honeywell-backend.AssemblyInfoInputs.cache
+C:\Users\adaoj\dev\flatiron\labs\Honeywell\Honeywell-backend\obj\Debug\netcoreapp3.1\Honeywell-backend.AssemblyInfo.cs
+C:\Users\adaoj\dev\flatiron\labs\Honeywell\Honeywell-backend\obj\Debug\netcoreapp3.1\Honeywell-backend.RazorTargetAssemblyInfo.cache
+C:\Users\adaoj\dev\flatiron\labs\Honeywell\Honeywell-backend\obj\Debug\netcoreapp3.1\staticwebassets\Honeywell-backend.StaticWebAssets.Manifest.cache
+C:\Users\adaoj\dev\flatiron\labs\Honeywell\Honeywell-backend\obj\Debug\netcoreapp3.1\staticwebassets\Honeywell-backend.StaticWebAssets.xml
