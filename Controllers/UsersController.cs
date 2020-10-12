@@ -7,6 +7,7 @@ using Honeywell_backend.Models;
 using Honeywell_backend.Serializers;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Honeywell_backend.Controllers {
     [Route ("api/[controller]")]
