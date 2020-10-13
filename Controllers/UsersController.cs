@@ -27,10 +27,8 @@ namespace Honeywell_backend.Controllers {
         {
             if (!ModelState.IsValid)
             {
-                
                 BadRequest(GenerateErrorsDetails(ModelState));
             }
-
             var userDB = await _context.Users
                 .FirstOrDefaultAsync(c => c.Username == request.Username);
 
@@ -51,7 +49,7 @@ namespace Honeywell_backend.Controllers {
 
             await _context.Users.AddAsync(user);
             await _context.SaveChangesAsync();
-            var result = new { success = true, client = user };
+            var result = new { success = true, user = user };
 
             return Ok(result);
         }
@@ -62,7 +60,7 @@ namespace Honeywell_backend.Controllers {
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
             if (user == null) return BadRequest("User Not Found!");
 
-            var result = new { success = true, client = user };
+            var result = new { success = true, user = user };
 
             return Ok(result);
         }
@@ -72,7 +70,7 @@ namespace Honeywell_backend.Controllers {
         {
             var usersList = await _context.Users.ToListAsync();
 
-            return Ok(new { success = true, users = usersList });
+            return Ok( new { success = true, users = usersList });
         }
 
         [HttpPost]
@@ -88,10 +86,10 @@ namespace Honeywell_backend.Controllers {
 
             if (user == null)
             {
-                return BadRequest(new { success = false, data = "Username and password don't match." });
+                return BadRequest( new { success = false, data = "Username and password don't match." });
             }
 
-            return Ok(new { success = true, client = new { username = user.Username } });
+            return Ok(new { success = true, user = new { username = user.Username } });
         }
 
         private object GenerateErrorsDetails(ModelStateDictionary ModelState)

@@ -54,6 +54,8 @@ namespace Honeywell_backend
             app.UseHttpsRedirection();
 
             app.UseRouting();
+            
+            app.UseCors("AllowSpecificOrigin");
 
             app.UseAuthorization();
 
