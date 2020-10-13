@@ -9,6 +9,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json;
+using System.Runtime.InteropServices.WindowsRuntime;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace Honeywell_backend.Controllers {
     [Route("api/[controller]")]
@@ -27,23 +29,18 @@ namespace Honeywell_backend.Controllers {
         {
             if (!ModelState.IsValid)
             {
-                var errorList = ModelState.Values.SelectMany(e => e.Errors).ToList();
-                var errormsgs = new List<string>();
-
-                errorList.ForEach(e =>
-                {
-                    errormsgs.Add(e.ErrorMessage);
-                });
-
-                var resultError = new { success = false, errors = errormsgs };
-
-                BadRequest(resultError);
+                
+                BadRequest(GenerateErrorsDetails(ModelState));
             }
 
             var userDB = await _context.Users
                 .FirstOrDefaultAsync(c => c.Username == request.Username);
 
-            if (userDB != null) return BadRequest("User already exists!");
+            if (userDB != null) 
+            {
+                ModelState.AddModelError("User", "User already exists!");
+                return BadRequest(GenerateErrorsDetails(ModelState));
+            }            
 
             var user = new User();
             user.Name = request.Name;
@@ -56,8 +53,43 @@ namespace Honeywell_backend.Controllers {
 
             await _context.Users.AddAsync(user);
             await _context.SaveChangesAsync();
-            var result = new { success = true, client = request };
-            return Ok(JsonSerializer.Serialize(result));
+            var result = new { success = true, client = user };
+
+            return Ok(result);
+        }
+        
+        [HttpGet("{id:int}")]
+        public async Task<ActionResult> GetUserDetails(int id)
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
+            if (user == null) return BadRequest("User Not Found!");
+
+            var result = new { success = true, client = user };
+
+            return Ok(result);
+        }
+
+        [HttpGet]
+        public async Task<ActionResult> GetAllUsers()   
+        {
+            var usersList = await _context.Users.ToListAsync();
+
+            return Ok(new { success = true, users = usersList });
+        }
+        
+        private object GenerateErrorsDetails(ModelStateDictionary ModelState)
+        {
+            var errorList = ModelState.Values.SelectMany(e => e.Errors).ToList();
+            var errormsgs = new List<string>();
+
+            errorList.ForEach(e =>
+            {
+                errormsgs.Add(e.ErrorMessage);
+            });
+
+            var resultError = new { success = false, errors = errormsgs };
+
+            return resultError;
         }
 
     }

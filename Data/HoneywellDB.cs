@@ -1,7 +1,6 @@
 ﻿
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
-
 using System.Threading.Tasks;
 using Honeywell_backend.Models;
 
