@@ -8,8 +8,6 @@ using Honeywell_backend.Serializers;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Text.Json;
-using System.Runtime.InteropServices.WindowsRuntime;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace Honeywell_backend.Controllers {
@@ -76,7 +74,26 @@ namespace Honeywell_backend.Controllers {
 
             return Ok(new { success = true, users = usersList });
         }
-        
+
+        [HttpPost]
+        [Route("login")]
+        public async Task<ActionResult> Login([FromBody] LoginSerializer request)
+        {
+            var user = await _context.Users
+                                .Where(
+                                    c => c.Username == request.Username
+                                    &&
+                                    c.Password == request.Password
+                                ).FirstOrDefaultAsync();
+
+            if (user == null)
+            {
+                return BadRequest(new { success = false, data = "Username and password don't match." });
+            }
+
+            return Ok(new { success = true, client = new { username = user.Username } });
+        }
+
         private object GenerateErrorsDetails(ModelStateDictionary ModelState)
         {
             var errorList = ModelState.Values.SelectMany(e => e.Errors).ToList();
