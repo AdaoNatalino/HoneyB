@@ -14,10 +14,10 @@ namespace Honeywell_backend.Tests
             var register = new RegisterViewModel()
             {
                 Address = "Test address",
-                Email = "guilhermemurari@icloud.com",
-                Name = "Guilherme",
+                Email = "adaojosen@hotmail.com",
+                Name = "Adao",
                 Password = "Teste123@1234",
-                Phone = "07489 50515121"
+                Phone = "0738815 4473"
             };
 
             var validator = new RegisterViewModelValidation().Validate(register);
