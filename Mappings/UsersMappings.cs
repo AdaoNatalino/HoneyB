@@ -21,29 +21,9 @@ namespace Honeywell_backend.Mappings
                 .HasColumnType("varchar(100)");
 
             builder
-                .Property(u => u.Username)
-                .IsRequired()
-                .HasColumnType("varchar(100)");
-
-            builder
-                .Property(u => u.Password)
-                .IsRequired()
-                .HasColumnType("varchar(100)");
-
-            builder
                 .Property(u => u.Address)
                 .IsRequired()
-                .HasColumnType("varchar(100)");
-
-            builder
-                .Property(u => u.Email)
-                .IsRequired()
-                .HasColumnType("varchar(100)");
-
-            builder
-                .Property(u => u.Phone)
-                .IsRequired()
-                .HasColumnType("varchar(100)");
+                .HasColumnType("varchar(100)");            
 
             builder
                 .Property(u => u.IsStaff)

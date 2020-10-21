@@ -1,95 +1,136 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using Honeywell_backend.Data;
 using Honeywell_backend.Models;
-using Honeywell_backend.Serializers;
-using Microsoft.AspNetCore.Http;
+using Honeywell_backend.ViewModel;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 
-namespace Honeywell_backend.Controllers {
+namespace Honeywell_backend.Controllers
+{
     [Route("api/[controller]")]
     [ApiController]
-    public class UsersController : ControllerBase
+    public class UsersController : Controller
     {
+        private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly UserManager<IdentityUser> _userManager;
+        private readonly AppSettings _appSettings;
         private HoneywellDB _context;
-
-        public UsersController(HoneywellDB context)
+        public UsersController(HoneywellDB context, SignInManager<IdentityUser> signInManager, UserManager<IdentityUser> userManager, IOptions<AppSettings> appsettings)
         {
+            _signInManager = signInManager;
+            _userManager = userManager;
+            _appSettings = appsettings.Value;
             _context = context;
         }
 
-        [HttpPost]
-        public async Task<ActionResult> CreateUser([FromBody] UserSerializer request)
+        [HttpPost("register")]
+        public async Task<ActionResult> Register(RegisterViewModel userRegisterViewModel)
         {
-            if (!ModelState.IsValid)
-            {
-                BadRequest(GenerateErrorsDetails(ModelState));
-            }
-            var userDB = await _context.Users
-                .FirstOrDefaultAsync(c => c.Username == request.Username);
+            if (!ModelState.IsValid) return BadRequest();
 
-            if (userDB != null) 
+            var userIdentity = new IdentityUser()
             {
-                ModelState.AddModelError("User", "User already exists!");
-                return BadRequest(GenerateErrorsDetails(ModelState));
-            }            
+                UserName = userRegisterViewModel.Email,
+                Email = userRegisterViewModel.Email,
+                EmailConfirmed = true,
+                PhoneNumber = userRegisterViewModel.Phone
+            };
+
+            var request = await _userManager.CreateAsync(userIdentity, userRegisterViewModel.Password);
+
+            foreach (var error in request.Errors)
+            {
+                ModelState.AddModelError(error.Code, error.Description);
+            }
+
+            if (!request.Succeeded) return BadRequest(GenerateErrorsDetails(ModelState));
 
             var user = new User();
-            user.Name = request.Name;
-            user.Username = request.Username;
-            user.Address = request.Address;
-            user.Password = request.Password;
-            user.Email = request.Email;
-            user.Phone = request.Phone;
-            user.IsStaff = request.IsStaff;
+            user.Id = Guid.Parse(userIdentity.Id);
+            user.Name = userRegisterViewModel.Name;
+            user.Address = userRegisterViewModel.Address;
+            user.IsStaff = userRegisterViewModel.IsStaff;
 
             await _context.Users.AddAsync(user);
             await _context.SaveChangesAsync();
-            var result = new { success = true, user = user };
 
-            return Ok(result);
+            var login = new LoginViewModel()
+            {
+                Username = userRegisterViewModel.Email,
+                Password = userRegisterViewModel.Password
+            };
+
+            return await Login(login);
         }
-        
-        [HttpGet("{id:int}")]
-        public async Task<ActionResult> GetUserDetails(int id)
+
+        [HttpPost("login")]
+        public async Task<ActionResult> Login(LoginViewModel loginViewModel)
         {
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
-            if (user == null) return BadRequest("User Not Found!");
+            if (!ModelState.IsValid) return BadRequest();
 
-            var result = new { success = true, user = user };
+            var response = await _signInManager.PasswordSignInAsync(loginViewModel.Username, loginViewModel.Password, false, false);
 
-            return Ok(result);
+            if (!response.Succeeded) BadRequest("Username and password don't match.");
+
+            var userIdentity = await _signInManager.UserManager.FindByNameAsync(loginViewModel.Username);
+
+            var userIdParsed = Guid.Parse(userIdentity.Id);
+            var user = await _context.Users.FirstOrDefaultAsync(user => user.Id == userIdParsed);
+
+            var responseLogin = new UserLoginResponse()
+            {
+                AccessToken = GenerateTokenEncoded(),
+                ExpiresIn = (int)TimeSpan.FromHours(_appSettings.ExpirationHours).TotalSeconds,
+                UserToken = new UserViewModel()
+                {
+                    Id = userIdParsed,
+                    Email = userIdentity.Email,
+                    Phone = userIdentity.PhoneNumber,
+                    Name = user.Name,                                       
+                    Address = user.Address,                    
+                    IsStaff = user.IsStaff
+                }
+
+            };
+            
+            return Ok(responseLogin);
         }
 
         [HttpGet]
-        public async Task<ActionResult> GetAllUsers()   
+        [Authorize]
+        public async Task<ActionResult> GetAllUsers()
         {
-            var usersList = await _context.Users.ToListAsync();
+            var response = new List<UserViewModel>();
 
-            return Ok( new { success = true, users = usersList });
-        }
+            var usersIdentityList = await _userManager.Users.ToListAsync();            
 
-        [HttpPost]
-        [Route("login")]
-        public async Task<ActionResult> Login([FromBody] LoginSerializer request)
-        {
-            var user = await _context.Users
-                                .Where(
-                                    c => c.Username == request.Username
-                                    &&
-                                    c.Password == request.Password
-                                ).FirstOrDefaultAsync();
-
-            if (user == null)
+            foreach (var userIdentity in usersIdentityList)
             {
-                return BadRequest( new { success = false, data = "Username and password don't match." });
+                var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == Guid.Parse(userIdentity.Id));
+               
+                response.Add(new UserViewModel
+                {
+                    Address = user.Address,
+                    Name = user.Name,
+                    IsStaff = user.IsStaff,
+                    
+                    Email = userIdentity.Email,
+                    Id = Guid.Parse(userIdentity.Id),
+                    Phone = userIdentity.PhoneNumber
+                });
             }
 
-            return Ok(new { success = true, user = new { username = user.Username } });
+            return Ok(new { success = true, users = response });
         }
 
         private object GenerateErrorsDetails(ModelStateDictionary ModelState)
@@ -107,5 +148,20 @@ namespace Honeywell_backend.Controllers {
             return resultError;
         }
 
+        private string GenerateTokenEncoded()
+        {
+            var tokenJwtHandler = new JwtSecurityTokenHandler();
+            var key = Encoding.ASCII.GetBytes(_appSettings.SecretKey);
+
+            var token = tokenJwtHandler.CreateToken(new SecurityTokenDescriptor()
+            {
+                Issuer = _appSettings.Issuer,
+                Audience = _appSettings.Audience,                
+                Expires = DateTime.UtcNow.AddHours(_appSettings.ExpirationHours),
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+            });
+
+            return tokenJwtHandler.WriteToken(token);
+        }
     }
 }

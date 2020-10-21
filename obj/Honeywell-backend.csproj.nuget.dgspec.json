@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\adaoj\\dev\\flatiron\\labs\\Honeywell\\Honeywell-backend\\Honeywell-backend.csproj": {}
+    "C:\\Users\\adaoj\\dev\\flatiron\\labs\\POS\\Honeywell\\Honeywell-backend\\Honeywell-backend.csproj": {}
   },
   "projects": {
-    "C:\\Users\\adaoj\\dev\\flatiron\\labs\\Honeywell\\Honeywell-backend\\Honeywell-backend.csproj": {
+    "C:\\Users\\adaoj\\dev\\flatiron\\labs\\POS\\Honeywell\\Honeywell-backend\\Honeywell-backend.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\adaoj\\dev\\flatiron\\labs\\Honeywell\\Honeywell-backend\\Honeywell-backend.csproj",
+        "projectUniqueName": "C:\\Users\\adaoj\\dev\\flatiron\\labs\\POS\\Honeywell\\Honeywell-backend\\Honeywell-backend.csproj",
         "projectName": "Honeywell-backend",
-        "projectPath": "C:\\Users\\adaoj\\dev\\flatiron\\labs\\Honeywell\\Honeywell-backend\\Honeywell-backend.csproj",
+        "projectPath": "C:\\Users\\adaoj\\dev\\flatiron\\labs\\POS\\Honeywell\\Honeywell-backend\\Honeywell-backend.csproj",
         "packagesPath": "C:\\Users\\adaoj\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\adaoj\\dev\\flatiron\\labs\\Honeywell\\Honeywell-backend\\obj\\",
+        "outputPath": "C:\\Users\\adaoj\\dev\\flatiron\\labs\\POS\\Honeywell\\Honeywell-backend\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\adaoj\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -38,6 +38,22 @@
       "frameworks": {
         "netcoreapp3.1": {
           "dependencies": {
+            "FluentValidation.AspNetCore": {
+              "target": "Package",
+              "version": "[9.2.0, )"
+            },
+            "Microsoft.AspNetCore.Authentication.JwtBearer": {
+              "target": "Package",
+              "version": "[3.1.9, )"
+            },
+            "Microsoft.AspNetCore.Identity.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[3.1.8, )"
+            },
+            "Microsoft.AspNetCore.Identity.UI": {
+              "target": "Package",
+              "version": "[3.1.9, )"
+            },
             "Microsoft.EntityFrameworkCore": {
               "target": "Package",
               "version": "[3.1.8, )"

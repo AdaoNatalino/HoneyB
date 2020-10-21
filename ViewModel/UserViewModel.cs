@@ -1,11 +1,12 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
-namespace Honeywell_backend.Serializers
+namespace Honeywell_backend.ViewModel
 {
-    public class UserSerializer
+    public class UserViewModel
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         
         [Required]
         [MaxLength(100)]
@@ -21,15 +22,7 @@ namespace Honeywell_backend.Serializers
         
         [Required]
         [MaxLength(100)]
-        public string Email { get; set; }
-        
-        [Required]
-        [MaxLength(100)]
-        public string Username { get; set; }    
-        
-        [Required]        
-        [MaxLength(100)]           
-        public string Password { get; set; }
+        public string Email { get; set; }               
         
         [Required]
         public bool IsStaff { get; set; }
