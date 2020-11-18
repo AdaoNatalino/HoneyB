@@ -69,7 +69,6 @@ namespace Honeywell_backend.Controllers
                 Username = userRegisterViewModel.Email,
                 Password = userRegisterViewModel.Password
             };
-
             return await Login(login);
         }
 

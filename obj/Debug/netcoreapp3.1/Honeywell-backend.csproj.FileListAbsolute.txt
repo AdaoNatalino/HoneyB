@@ -137,3 +137,4 @@ C:\Users\adaoj\dev\flatiron\labs\POS\Honeywell\Honeywell-backend\obj\Debug\netco
 C:\Users\adaoj\dev\flatiron\labs\POS\Honeywell\Honeywell-backend\obj\Debug\netcoreapp3.1\Honeywell-backend.dll
 C:\Users\adaoj\dev\flatiron\labs\POS\Honeywell\Honeywell-backend\obj\Debug\netcoreapp3.1\Honeywell-backend.pdb
 C:\Users\adaoj\dev\flatiron\labs\POS\Honeywell\Honeywell-backend\obj\Debug\netcoreapp3.1\Honeywell-backend.genruntimeconfig.cache
+C:\Users\adaoj\dev\flatiron\labs\POS\Honeywell\Honeywell-backend\obj\Debug\netcoreapp3.1\Honeywell-backend.csprojAssemblyReference.cache
