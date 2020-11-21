@@ -86,6 +86,7 @@ namespace Honeywell_backend.Controllers
             var userIdParsed = Guid.Parse(userIdentity.Id);
             var user = await _context.Users.FirstOrDefaultAsync(user => user.Id == userIdParsed);
 
+
             var responseLogin = new UserLoginResponse()
             {
                 AccessToken = GenerateTokenEncoded(),
