@@ -152,7 +152,6 @@ namespace Honeywell_backend.Controllers
         {
             var tokenJwtHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_appSettings.SecretKey);
-
             var token = tokenJwtHandler.CreateToken(new SecurityTokenDescriptor()
             {
                 Issuer = _appSettings.Issuer,
